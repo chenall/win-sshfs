@@ -633,14 +633,14 @@ namespace Sshfs
             return NtStatus.Success;
         }
 
-        NtStatus IDokanOperations.GetVolumeInformation(out string volumeLabel, out FileSystemFeatures features,
-                                                         out string filesystemName, DokanFileInfo info)
+        NtStatus IDokanOperations.GetVolumeInformation(out string volumeLabel, out FileSystemFeatures features, out string fileSystemName, out uint maximumComponentLength, DokanFileInfo info)
         {
             LogFSActionSuccess("DiskInfo", _volumeLabel, null, "");
 
             volumeLabel = _volumeLabel;
 
-            filesystemName = "SSHVFS";
+            fileSystemName = "SSHVFS";
+            maximumComponentLength = 256;
 
             features = FileSystemFeatures.CasePreservedNames | FileSystemFeatures.CaseSensitiveSearch |
                        FileSystemFeatures.SupportsRemoteStorage | FileSystemFeatures.UnicodeOnDisk | FileSystemFeatures.SupportsObjectIDs;
@@ -691,6 +691,11 @@ namespace Sshfs
         {
             streams = new FileInformation[0];
             return NtStatus.NotImplemented;
+        }
+
+        public NtStatus GetVolumeInformation(out string volumeLabel, out FileSystemFeatures features, out string fileSystemName, out uint maximumComponentLength, DokanFileInfo info)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -1496,20 +1496,19 @@ namespace Sshfs
             return NtStatus.Success;
         }
 
-        NtStatus IDokanOperations.GetVolumeInformation(out string volumeLabel, out FileSystemFeatures features,
-                                                         out string filesystemName, DokanFileInfo info)
+        NtStatus IDokanOperations.GetVolumeInformation(out string volumeLabel, out FileSystemFeatures features, out string fileSystemName, out uint maximumComponentLength, DokanFileInfo info)
         {
             LogFSActionInit("GetVolumeInformation", this._volumeLabel, (SftpContext)info.Context, "");
 
             volumeLabel = _volumeLabel;
 
-            filesystemName = "SSHFS";
-
+            fileSystemName = "SSHFS";
+            maximumComponentLength = 256;
             features = FileSystemFeatures.CasePreservedNames | FileSystemFeatures.CaseSensitiveSearch |
                        FileSystemFeatures.SupportsRemoteStorage | FileSystemFeatures.UnicodeOnDisk | FileSystemFeatures.SequentialWriteOnce;
             //FileSystemFeatures.PersistentAcls
 
-            LogFSActionSuccess("GetVolumeInformation", this._volumeLabel, (SftpContext)info.Context, "FS:{0} Features:{1}", filesystemName, features);
+            LogFSActionSuccess("GetVolumeInformation", this._volumeLabel, (SftpContext)info.Context, "FS:{0} Features:{1}", fileSystemName, features);
             return NtStatus.Success;
         }
 
@@ -1575,6 +1574,11 @@ namespace Sshfs
             //Alternate Data Streams are NFTS-only feature, no need to handle
             streams = new FileInformation[0];
             return NtStatus.NotImplemented;
+        }
+
+        public NtStatus GetVolumeInformation(out string volumeLabel, out FileSystemFeatures features, out string fileSystemName, out uint maximumComponentLength, DokanFileInfo info)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
